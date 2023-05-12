@@ -1,43 +1,61 @@
-select *
-from PortfolioProject..CovidDeaths
-where continent is not null
-order by 3, 4
+SELECT
+	*
+FROM PortfolioProject..CovidDeaths
+WHERE continent is not null
+ORDER BY 3, 4
 
 --select *
 --from PortfolioProject..CovidVaccinations
 --order by 3, 4
 
-select location, date, total_cases, new_cases, total_deaths, population
-from PortfolioProject..CovidDeaths
-where continent is not null
-order by 1, 2
+SELECT
+	location,
+	date,
+	total_cases,
+	new_cases,
+	total_deaths,
+	population
+FROM PortfolioProject..CovidDeaths
+WHERE continent is not null
+ORDER BY 1, 2
 
 -- Looking at Total Cases vs Total Deaths
 -- Shows chance of dying if you contract covid in your country
 
-select location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
-from PortfolioProject..CovidDeaths
-where location = 'Indonesia' and continent is not null
-order by 1, 2
+SELECT
+	location,
+	date,
+	total_cases,
+	total_deaths,
+	(total_deaths/total_cases)*100 as DeathPercentage
+FROM PortfolioProject..CovidDeaths
+WHERE location = 'Indonesia' and continent is not null
+ORDER BY 1, 2
 
 -- Looking at Total Cases vs Population
 -- Shows what percentage of population got Covid
 
-select location, date, population, total_cases, (total_cases/population)*100 as PercentPopulationInfected
-from PortfolioProject..CovidDeaths
-where continent is not null
---where location = 'Indonesia'
-order by 1, 2
+SELECT
+	location,
+	date,
+	population,
+	total_cases,
+	(total_cases/population)*100 as PercentPopulationInfected
+FROM PortfolioProject..CovidDeaths
+WHERE continent is not null
+ORDER BY 1, 2
 
 -- Looking at Country with Highest Infection Rate compared to Population
 
-
-select location, population, max(total_cases) as HighestInfectionCount,  max(total_cases/population)*100 as PercentPopulationInfected
-from PortfolioProject..CovidDeaths
-where continent is not null
---where location = 'Indonesia'
-group by location, population
-order by PercentPopulationInfected desc
+SELECT
+	location,
+	population,
+	max(total_cases) as HighestInfectionCount,
+	max(total_cases/population)*100 as PercentPopulationInfected
+FROM PortfolioProject..CovidDeaths
+WHERE continent is not null
+GROUP BY 1, 2
+ORDER BY PercentPopulationInfected desc
 
 
 -- Showing Countries with Highest Death Count per Population
