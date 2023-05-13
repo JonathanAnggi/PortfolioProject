@@ -46,8 +46,8 @@ ORDER BY 1, 2;
 SELECT
 	location,
 	population,
-	max(total_cases) as HighestInfectionCount,
-	max(total_cases/population)*100 as PercentPopulationInfected
+	MAX(total_cases) as HighestInfectionCount,
+	MAX(total_cases/population)*100 as PercentPopulationInfected
 FROM PortfolioProject..CovidDeaths
 WHERE continent is not null
 GROUP BY 1, 2
@@ -58,7 +58,7 @@ ORDER BY PercentPopulationInfected desc;
 
 SELECT
 	location,
-	max(cast(total_deaths as int)) as TotalDeathCount
+	MAX(CAST(total_deaths as int)) as TotalDeathCount
 FROM PortfolioProject..CovidDeaths
 WHERE continent is not null
 GROUP BY location 
@@ -70,7 +70,7 @@ ORDER BY TotalDeathCount desc;
 
 SELECT
 	continent,
-	max(cast(total_deaths as int)) as TotalDeathCount
+	MAX(CAST(total_deaths as int)) as TotalDeathCount
 FROM PortfolioProject..CovidDeaths
 WHERE continent is not null
 GROUP BY continent
@@ -80,8 +80,8 @@ ORDER BY TotalDeathCount desc;
 
 SELECT
 	SUM(new_cases) as total_cases,
-	SUM(cast(new_deaths as int)) as total_deaths,
-	SUM(cast(new_deaths as int)) / SUM(new_cases)*100 as DeathPercentage
+	SUM(CAST(new_deaths as int)) as total_deaths,
+	SUM(CAST(new_deaths as int)) / SUM(new_cases)*100 as DeathPercentage
 FROM PortfolioProject..CovidDeaths
 WHERE continent is not null
 ORDER BY 1, 2;
@@ -113,15 +113,21 @@ FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
-	WHERE dea.continent is not null
+WHERE dea.continent is not null
 	AND dea.date >'2022-01-01'
 ORDER BY 2,3;
 
 
 -- CTE or subqueries
 
-With PopVsVac (continent, location, date, population, new_vaccinations, RollingPoepleVaccinated)
-as
+With PopVsVac (
+	continent, 
+	location, 
+	date, 
+	population, 
+	new_vaccinations, 
+	RollingPoepleVaccinated
+) as
 (
 SELECT 
 	dea.continent,
@@ -136,8 +142,8 @@ FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
-	WHERE dea.continent is not null
-	AMD dea.date >'2022-01-01'
+WHERE dea.continent is not null
+	AND dea.date >'2022-01-01'
 )
 
 SELECT
@@ -173,7 +179,7 @@ FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
-	WHERE dea.continent is not null
+WHERE dea.continent is not null
 	AND dea.date >'2022-01-01'
 	
 SELECT 
@@ -199,7 +205,7 @@ FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.location = vac.location
 	AND dea.date = vac.date
-	WHERE dea.continent is not null
+WHERE dea.continent is not null
 	AND dea.date >'2022-01-01'
 
 
