@@ -1,140 +1,220 @@
-select *
-from sales;
-
-select SaleDate, Amount, Customers
-from sales;
-
-select SaleDate, Amount, Boxes, Amount/Boxes  'Amount per Boxes'
-from sales;
-
-select *
-from sales
-where amount > 10000
-order by amount;
-
-select *
-from sales
-where geoid = 'g1'
-order by pid, amount desc;
-
-select *
-from sales
-where amount > 10000
-and SaleDate >= '2022-01-01';
-
-select saledate, amount
-from sales
-where amount > 10000 and year(SaleDate) = 2022
-order by amount desc;
-
-select *
-from sales
-where Boxes between 0 and 50
-order by boxes;
-
-select SaleDate, amount, boxes, weekday(SaleDate) 'Day of Week'
-from sales
-where weekday(SaleDate) = 4;
-
-select *
-from people;
-
-select *
-from people
-where team = 'Delish' or team = 'Jucies';
-
-select *
-from people
-where team in ('Delish','Jucies');
-
-select *
-from people
-where salesperson like 'B%';
-
-select SaleDate, amount,
-		case
-			when amount < 1000 then 'Under 1k'
-			when amount < 5000 then 'Under 5k'
-			when amount < 10000 then 'Under 10k'
-			else 'Above 10k'
-			end as 'Amount Category'
-from sales
-order by amount desc;
+SELECT
+	*
+FROM sales;
 
 
-select *
-from people p
-join sales s
-on p.spid = s.spid;
-
-select s.saledate, s.amount, pr.product
-from sales s
-	left join products pr
-	on s.pid = pr.pid;
-    
-select s.saledate, s.amount, p.salesperson, pr.product
-from sales s
-	join people p
-	on s.spid = p.spid
-		join products pr
-        on s.pid = pr.pid;
-
-select s.saledate, s.amount, p.salesperson, p.team, pr.product
-from sales s
-	join people p
-	on s.spid = p.spid
-		join products pr
-        on s.pid = pr.pid
-where s.amount <500
-and p.Team = 'Delish';
-
-select s.saledate, s.amount, p.salesperson, p.team, pr.product
-from sales s
-	join people p
-	on s.spid = p.spid
-		join products pr
-        on s.pid = pr.pid
-where s.amount <500
-and p.Team = '';
-
-select s.saledate, s.amount, p.salesperson, p.team, pr.product, g.Geo
-from sales s
-	join people p
-	on s.spid = p.spid
-		join products pr
-        on s.pid = pr.pid
-         join geo g
-         on s.geoid = g.geoid
-			where g.geo in ('New Zealand', 'India')
-				and p.team <> ''
-				and s.amount <500
-order by saledate;
+SELECT
+	SaleDate,
+	Amount, 
+	Customers
+FROM sales;
 
 
-select geoid, sum(Amount)
-from sales
-group by geoid;
+SELECT
+	SaleDate, 
+	Amount, 
+	Boxes, 
+	Amount/Boxes 'Amount per Boxes'
+FROM sales;
 
-select g.geo, sum(boxes), sum(amount), avg(Amount)
-from sales s
-	join geo g
-		on s.geoid = g.geoid
-group by geo;
+
+SELECT
+	*
+FROM sales
+WHERE Amount > 10000
+ORDER BY Amount;
+
+
+SELECT
+	*
+FROM sales
+WHERE GeoId = 'g1'
+ORDER BY PId, amount desc;
+
+
+SELECT
+	*
+FROM sales
+WHERE Amount > 10000
+AND SaleDate >= '2022-01-01';
+
+
+SELECT
+	SaleDate, 
+	Amount
+FROM sales
+WHERE Amount > 10000 and year(SaleDate) = 2022
+ORDER BY Amount desc;
+
+
+SELECT
+	*
+FROM sales
+WHERE Boxes between 0 and 50
+ORDER BY Boxes;
+
+
+SELECT
+	SaleDate, 
+	Amount, 
+	Boxes,
+	WEEKDAY(SaleDate) 'Day of Week'
+FROM sales
+WHERE WEEKDAY(SaleDate) = 4;
+
+
+SELECT
+	*
+FROM people;
+
+
+SELECT
+	*
+FROM people
+WHERE team = 'Delish' or team = 'Jucies';
+
+
+SELECT
+	*
+FROM people
+WHERE team IN ('Delish','Jucies');
+
+
+SELECT *
+FROM people
+WHERE salesperson LIKE 'B%';
+
+
+SELECT
+	SaleDate,
+	Amount,
+	CASE
+		WHEN Amount < 1000 then 'Under 1k'
+		WHEN Amount < 5000 then 'Under 5k'
+		WHEN Amount < 10000 then 'Under 10k'
+		ELSE 'Above 10k'
+	END as 'Amount Category'
+FROM sales
+ORDER BY Amount desc;
+
+
+SELECT
+	*
+FROM people p
+JOIN sales s
+	ON p.spid = s.spid;
 	
-select pr.category, p.team, sum(boxes), sum(amount)
-from sales s
-	join people p
-		on s.spid = p.spid
-			join products pr
-				on s.pid = pr.pid
-where p.team <> ''
-group by pr.category, p.team
-order by pr.category, p.team;
 
-select pr.product, sum(amount) as 'Total Amount'
-from sales s
-	join products pr
-		on s.pid = pr.pid
-group by pr.product
-order by `Total Amount` desc
-limit 10;
+SELECT
+	s.saledate,
+	s.amount, 
+	pr.product
+FROM sales s
+LEFT JOIN products pr
+	ON s.pid = pr.pid;
+	
+    
+SELECT 
+	s.saledate,
+	s.amount,
+	p.salesperson,
+	pr.product
+FROM sales s
+JOIN people p
+	ON s.spid = p.spid
+JOIN products pr
+        ON s.pid = pr.pid
+	
+
+SELECT
+	s.saledate,
+	s.amount,
+	p.salesperson,
+	p.team,
+	pr.product
+FROM sales s
+JOIN people p
+	ON s.spid = p.spid
+JOIN products pr
+        ON s.pid = pr.pid
+WHERE s.amount <500
+	AND p.Team = 'Delish';
+	
+
+SELECT
+	s.saledate, 
+	s.amount,
+	p.salesperson,
+	p.team,
+	pr.product
+FROM sales s
+JOIN people p
+	ON s.spid = p.spid
+JOIN products pr
+        ON s.pid = pr.pid
+WHERE s.amount <500
+	AND p.Team = '';
+	
+
+SELECT
+	s.saledate,
+	s.amount,
+	p.salesperson, 
+	p.team, 
+	pr.product, 
+	g.Geo
+FROM sales s
+JOIN people p
+	ON s.spid = p.spid
+JOIN products pr
+        ON s.pid = pr.pid
+JOIN geo g
+	ON s.geoid = g.geoid
+WHERE g.geo IN ('New Zealand', 'India')
+	AND p.team <> ''
+	AND s.amount <500
+ORDER BY saledate;
+
+
+SELECT
+	geoid, 
+	SUM(Amount)
+FROM sales
+GROUP BY geoid;
+
+
+SELECT
+	g.geo, 
+	SUM(boxes), 
+	SUM(amount), 
+	AVG(Amount)
+FROM sales s
+JOIN geo g
+	ON s.geoid = g.geoid
+GROUP BY geo;
+
+	
+SELECT
+	pr.category, 
+	p.team, 
+	SUM(boxes), 
+	SUM(amount)
+FROM sales s
+JOIN people p
+	ON s.spid = p.spid
+JOIN products pr
+	ON s.pid = pr.pid
+WHERE p.team <> ''
+GROUP BY pr.category, p.team
+ORDER BY pr.category, p.team;
+
+
+SELECT
+	pr.product, 
+	SUM(amount) as 'Total Amount'
+FROM sales s
+JOIN products pr
+	ON s.pid = pr.pid
+GROUP BY pr.product
+ORDER BY `Total Amount` desc
+LIMIT 10;
