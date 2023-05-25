@@ -1,0 +1,120 @@
+Here, I test my knowledge and skills with these questions that are designed to simulate an interview.
+I got this from https://www.analyticsmentor.io/products/sql-practice-questions
+
+QUESTION 1
+SELECT
+	  c.customer_id,
+    p.product_name
+FROM customers c
+INNER JOIN products p
+		ON c.product_key = p.product_key
+ORDER BY 2;
+
+
+QUESTION 2
+SELECT
+	  CAST(purchase_date as DATE),
+    SUM(purchase_amount),
+  	ROUND(AVG(SUM(purchase_amount)) OVER (
+                                    ORDER BY purchase_date desc
+                                    ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING),2)
+    AS rolling_avg_3d
+FROM customer_sales
+GROUP BY 1;
+
+
+QUESTION 3
+UPDATE customers_for_update
+SET product_key = 4
+WHERE customer_id = 3  and product_key = 2;
+
+SELECT
+	  *
+FROM customers_for_update
+ORDER BY customer_id, product_key;
+
+
+QUESTION 4
+SELECT
+    customer_name,
+    purchase_amount, 
+    (SELECT
+     	   avg(purchase_amount)
+     FROM customer_sales)
+FROM customer_sales
+WHERE purchase_amount >
+	  (SELECT
+     	    avg(purchase_amount)
+     FROM customer_sales)
+;
+
+
+
+QUESTION 5
+create table customers_for_col_name_change (
+customer_id int
+, product_key int
+);
+
+insert into customers_for_col_name_change values (1,1);
+insert into customers_for_col_name_change values (1,2);
+
+ALTER TABLE customers_for_col_name_change
+	RENAME column product_key to product_id;
+
+SELECT
+	  *
+FROM customers_for_col_name_change;
+
+
+
+QUESTION 6
+SELECT
+	  c.customer_id,
+    COALESCE (product_name, 'unknown-product')
+FROM customers c
+LEFT OUTER JOIN products p
+	  ON c.product_key = p.product_key
+ORDER BY 1, 2;
+
+
+
+QUESTION 7
+SELECT
+	  c.customer_id,
+    p.product_name
+FROM products p
+FULL OUTER JOIN customers c
+	  ON p.product_key = c.product_key
+ORDER BY 1, 2;
+
+
+
+QUESTION 8
+SELECT 
+	  e.employee_name,
+    m.employee_name
+FROM employees e
+LEFT OUTER JOIN employees m
+   ON e.manager_id = m.employee_id
+ORDER BY 1;
+
+
+
+QUESTION 9
+SELECT
+	  ROUND(MIN(purchase_amount),2) as min_purchase_amount,
+    ROUND(MAX(purchase_amount),2) as max_purchase_amount,
+    ROUND(AVG(purchase_amount),2) as avg_purchase_amount,
+    ROUND(SUM(purchase_amount),2) as total_purchase_amount
+FROM customer_sales;
+
+
+QUESTION 10
+SELECT
+	  CASE
+    	WHEN customer_name IN ('brad', 'rick')
+      THEN UPPER(customer_name)
+      ELSE customer_name
+    END
+FROM customer_sales;
